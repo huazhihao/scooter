@@ -32,7 +32,7 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "scooter",
 	Short: "A fast and lightweight fully featured reverse proxy",
-	Long: `Scooter is a fast and lightweight fully featured reverse proxy.
+	Long: `🛵 Scooter is a fast and lightweight fully featured reverse proxy.
 
   Find more information at: https://github.com/huazhihao/scooter`,
 
