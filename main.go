@@ -15,8 +15,19 @@ limitations under the License.
 */
 package main
 
-import "scooter/cmd"
+import (
+	"fmt"
+
+	"github.com/huazhihao/scooter/cmd"
+)
+
+var (
+	// Version is fetched during build time
+	Version string
+	// GitSHA is fetched during build time
+	GitSHA string
+)
 
 func main() {
-  cmd.Execute()
+	cmd.Execute(fmt.Sprintf("%s-%s", Version, GitSHA))
 }
