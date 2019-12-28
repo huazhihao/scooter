@@ -8,7 +8,11 @@ deploy:
   provider: releases
   api_key:
     secure: IR/DclCUCId1AK+sMmUqMzAHM4hZvgCOrf8u1shBmt1szJyay69bUqordyTob8CdKVCg1GR1wEjS2w3p3handIakZk5s4rsW9N2EjvsOI4nOetnV4S47ZOeOaNgtBRzFpXJzLCyVv8PQOWTS/6aWYeSPSt2gl+7hFiTXhkGdNMzm+N9flomIyGb0eapIpTmi+1zrCjyH11dG8Ch0DbyAZ79TC+YJ413iCRikA0WfnSuKNXLyoqT9xGArrkKDJFZNo8r2fml81cEIOZpUqFaF3HQj1Dr4eDQWbMcq0kmbwbo/B4Q5BkawUSPIUxte3SXpzFhUtPzxvVjttEQJkGAuyrd1sIS52dvKZTdEJyFwwNWJjnPagduVy7tke2TarhA8DMbinPWk7bZ6ppyHahYEIzpdU75PLY8cI4a0+0aBa7toCCHE6ENnYL4zsTpFgFxD8f6dx+DLh8/0tSY8G0jHkA0SAE526JVXpYZgakYqcf7QWRBQYkWQnUSTgmSZ9MHNQi+hBH0FP9vffZb3qpemxAzrADcZXrvcp80tbMrCOVwR1IU3LdoTUdji/ujul2RdToz1zb9SiWRaZRqbf1jEE1FgewtakMeqN3B4aO8F9ab98xPjCpzaKbmIntDl9KPao1zOZqTOqHabRJ5aSjfgokDnoeRXN6ll0AnPLpcW4I0=
-  file: bin/*
+  file:
+    - bin/scooter-darwin-amd64
+    - bin/scooter-linux-amd64
+    - bin/scooter-linux-arm64
+    - bin/scooter-windows-amd64.exe
   draft: false
   prerelease: true
   skip_cleanup: true
