@@ -1,0 +1,32 @@
+- name: api-gateway
+  bind: ":8080"
+  rules:
+    - path: /
+      url: "http://api-v2/"
+    - path: /v1/
+      url: "http://api-v1/"
+
+- name: https
+  bind: ":8443"
+  protocol: https
+  tls:
+    ca: ./example-ca.pem
+    cert: ./example-cert.pem
+    key: ./example-key.pem
+  rules:
+    - url: "http://example.com/"
+
+- name: load-balancer
+  bind: ":8000"
+  rules:
+    - type: load-balancer
+      servers:
+        - "http://server:8001/"
+        - "http://server:8002/"
+
+- name: tcp-relay
+  protocol: tcp
+  port: 22
+  addr:
+    ip: 192.168.1.100
+    port: 22
