@@ -23,6 +23,9 @@ import (
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
+
+	"github.com/huazhihao/scooter/pkg/http"
+	"github.com/huazhihao/scooter/pkg/log"
 )
 
 var (
@@ -37,7 +40,18 @@ var rootCmd = &cobra.Command{
   Find more information at: https://github.com/huazhihao/scooter`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-
+		log.SetLevel("debug")
+		p := &http.Proxy{
+			Bind: ":8000",
+			Rules: []http.Rule{
+				http.Rule{Url: "http://example.com"},
+			},
+		}
+		err := p.Reload()
+		if err != nil {
+			log.Fatalf("url convertion failure: %v")
+		}
+		p.ListenAndServe()
 	},
 }
 

@@ -1,3 +1,13 @@
+- name: reverse-proxy
+  bind: ":8000"
+  rules:
+    - url: "http://localhost:8000"
+      headers:
+        - key: Host
+          value: $local_host
+        - key: X-Real-IP
+          value: $remote_ip
+
 - name: api-gateway
   bind: ":8080"
   rules:
@@ -6,7 +16,7 @@
     - path: /v1/
       url: "http://api-v1/"
 
-- name: https
+- name: https-proxy
   bind: ":8443"
   protocol: https
   tls:
@@ -19,8 +29,7 @@
 - name: load-balancer
   bind: ":8000"
   rules:
-    - type: load-balancer
-      servers:
+    - urls:
         - "http://server:8001/"
         - "http://server:8002/"
 
