@@ -49,7 +49,7 @@ var rootCmd = &cobra.Command{
 		}
 		err := p.Reload()
 		if err != nil {
-			log.Fatalf("url convertion failure: %v")
+			log.Fatalf("url convertion failure: %v", err)
 		}
 		p.ListenAndServe()
 	},
