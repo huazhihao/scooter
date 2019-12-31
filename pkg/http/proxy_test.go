@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestProxyPath(t *testing.T) {
+func TestHttpProxyPath(t *testing.T) {
 	backend := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// dummy rely with the url path
 		fmt.Fprint(w, r.URL.Path)
@@ -20,7 +20,7 @@ func TestProxyPath(t *testing.T) {
 	p.Rules = []Rule{
 		Rule{Url: backend.URL},
 	}
-	p.Reload()
+	p.reload()
 
 	testcases := map[string]string{
 		"":         "/",
@@ -47,7 +47,7 @@ func TestProxyPath(t *testing.T) {
 	}
 }
 
-func TestProxyRules(t *testing.T) {
+func TestHttpProxyRules(t *testing.T) {
 	backend1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "1")
 	}))
@@ -63,7 +63,7 @@ func TestProxyRules(t *testing.T) {
 		Rule{Path: "/", Url: backend1.URL},
 		Rule{Path: "/v2", Url: backend2.URL},
 	}
-	p.Reload()
+	p.reload()
 
 	testcases := map[string]string{
 		"":        "1",

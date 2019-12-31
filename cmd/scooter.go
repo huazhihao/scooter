@@ -41,13 +41,12 @@ var rootCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		log.SetLevel("debug")
-		p := &http.Proxy{
+		p, err := http.NewProxy(http.Proxy{
 			Bind: ":8000",
 			Rules: []http.Rule{
 				http.Rule{Url: "http://example.com"},
 			},
-		}
-		err := p.Reload()
+		})
 		if err != nil {
 			log.Fatalf("url convertion failure: %v", err)
 		}

@@ -9,6 +9,15 @@ import (
 	"github.com/huazhihao/scooter/pkg/log"
 )
 
+// NewProxy creates a new tcp proxy
+func NewProxy(p Proxy) (*Proxy, error) {
+	err := p.reload()
+	if err != nil {
+		return nil, err
+	}
+	return &p, nil
+}
+
 func joinURLPath(a, b string) string {
 	aslash := strings.HasSuffix(a, "/")
 	bslash := strings.HasPrefix(b, "/")
@@ -36,8 +45,8 @@ func (p *Proxy) getLongestMatchingRule(path string) int {
 	return idx
 }
 
-// Reload reloads settings during runtime
-func (p *Proxy) Reload() error {
+// reload reloads settings during runtime
+func (p *Proxy) reload() error {
 	for i, r := range p.Rules {
 		{
 			url, err := url.Parse(r.Url)

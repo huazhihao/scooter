@@ -66,3 +66,21 @@ func (p Proxy) connCopy(dst, src net.Conn, errCh chan error) {
 		}
 	}
 }
+
+// ListenAndServe listens on proxy.bind and then calls Serve to handle
+// requests on incoming connections.
+func (p *Proxy) ListenAndServe() {
+	ln, err := net.Listen("tcp", "")
+	if err != nil {
+		log.Errorf("TODO: %v", err)
+		return
+	}
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			log.Errorf("TODO: %v", err)
+			return
+		}
+		go p.ServeTCP(conn)
+	}
+}
