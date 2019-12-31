@@ -8,29 +8,23 @@ import (
 	"github.com/huazhihao/scooter/pkg/log"
 )
 
-// Proxy forwards a TCP request to a TCP backend
-type Proxy struct {
-	addr     *net.TCPAddr
-	deadline time.Duration
-}
-
-// NewProxy creates a new tcp proxy
-func NewProxy(addr string, deadline time.Duration) (*Proxy, error) {
-	tcpAddr, err := net.ResolveTCPAddr("tcp", addr)
+// NewTcpProxy creates a new tcp proxy
+func NewTcpProxy(p TcpProxy) (*TcpProxy, error) {
+	remote, err := net.ResolveTCPAddr("tcp", p.Remote)
 	if err != nil {
 		return nil, err
 	}
-
-	return &Proxy{addr: tcpAddr, deadline: deadline}, nil
+	p.remote = remote
+	return &p, nil
 }
 
 // ServeTCP forwards the connection to a backend
-func (p *Proxy) ServeTCP(conn net.Conn) {
+func (p *TcpProxy) ServeTCP(conn net.Conn) {
 	log.Debugf("Handling tcp connection from %s", conn.RemoteAddr())
 
 	defer conn.Close()
 
-	connBackend, err := net.DialTCP("tcp", nil, p.addr)
+	connBackend, err := net.DialTCP("tcp", nil, p.remote)
 	if err != nil {
 		log.Errorf("Error while connection to backend: %v", err)
 		return
@@ -49,7 +43,7 @@ func (p *Proxy) ServeTCP(conn net.Conn) {
 	<-errChan
 }
 
-func (p Proxy) connCopy(dst, src net.Conn, errCh chan error) {
+func (p TcpProxy) connCopy(dst, src net.Conn, errCh chan error) {
 	_, err := io.Copy(dst, src)
 	errCh <- err
 
@@ -69,7 +63,7 @@ func (p Proxy) connCopy(dst, src net.Conn, errCh chan error) {
 
 // ListenAndServe listens on proxy.bind and then calls Serve to handle
 // requests on incoming connections.
-func (p *Proxy) ListenAndServe() {
+func (p *TcpProxy) ListenAndServe() {
 	ln, err := net.Listen("tcp", "")
 	if err != nil {
 		log.Errorf("TODO: %v", err)

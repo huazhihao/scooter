@@ -36,6 +36,4 @@
 - name: tcp-relay
   protocol: tcp
   bind: ":22"
-  addr:
-    ip: 192.168.1.100
-    port: 22
+  remote: "192.168.1.100:22"

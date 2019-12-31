@@ -41,7 +41,7 @@ var rootCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		log.SetLevel("debug")
-		p, err := http.NewProxy(http.Proxy{
+		p, err := http.NewHttpProxy(http.HttpProxy{
 			Bind: ":8000",
 			Rules: []http.Rule{
 				http.Rule{Url: "http://example.com"},

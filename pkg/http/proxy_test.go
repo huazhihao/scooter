@@ -13,7 +13,7 @@ func TestHttpProxyPath(t *testing.T) {
 		// dummy rely with the url path
 		fmt.Fprint(w, r.URL.Path)
 	}))
-	p := &Proxy{}
+	p := &HttpProxy{}
 	frontend := httptest.NewServer(p)
 	t.Logf("backend: %s", backend.URL)
 	t.Logf("scooter: %s", frontend.URL)
@@ -54,7 +54,7 @@ func TestHttpProxyRules(t *testing.T) {
 	backend2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "2")
 	}))
-	p := &Proxy{}
+	p := &HttpProxy{}
 	frontend := httptest.NewServer(p)
 	t.Logf("backend1: %s", backend1.URL)
 	t.Logf("backend2: %s", backend2.URL)

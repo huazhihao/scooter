@@ -10,7 +10,7 @@ import (
 )
 
 // NewProxy creates a new tcp proxy
-func NewProxy(p Proxy) (*Proxy, error) {
+func NewHttpProxy(p HttpProxy) (*HttpProxy, error) {
 	err := p.reload()
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func joinURLPath(a, b string) string {
 	return a + b
 }
 
-func (p *Proxy) getLongestMatchingRule(path string) int {
+func (p *HttpProxy) getLongestMatchingRule(path string) int {
 	maxlen := -1
 	idx := -1
 	for i, r := range p.Rules {
@@ -46,7 +46,7 @@ func (p *Proxy) getLongestMatchingRule(path string) int {
 }
 
 // reload reloads settings during runtime
-func (p *Proxy) reload() error {
+func (p *HttpProxy) reload() error {
 	for i, r := range p.Rules {
 		{
 			url, err := url.Parse(r.Url)
@@ -68,7 +68,7 @@ func (p *Proxy) reload() error {
 	return nil
 }
 
-func (p *Proxy) delegateDirector(req *http.Request) {
+func (p *HttpProxy) delegateDirector(req *http.Request) {
 	i := p.getLongestMatchingRule(req.URL.Path)
 
 	if i >= 0 {
@@ -93,7 +93,7 @@ func (p *Proxy) delegateDirector(req *http.Request) {
 }
 
 // ServeHTTP receives and handles a single http request
-func (p *Proxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+func (p *HttpProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	log.Debugf("receiving %s request from %s/%s", req.Method, req.Host, req.URL.Path)
 
 	r := &httputil.ReverseProxy{
@@ -105,11 +105,10 @@ func (p *Proxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 // ListenAndServe listens on proxy.bind and then calls Serve to handle
 // requests on incoming connections.
-func (p *Proxy) ListenAndServe() {
+func (p *HttpProxy) ListenAndServe() {
 	http.HandleFunc("/", p.ServeHTTP)
-	log.Debugf("Handling HTTP connection on %s", p.Bind)
-	server := &http.Server{Addr: p.Bind}
-	err := server.ListenAndServe()
+	log.Debugf("Handling http connection on %s", p.Bind)
+	err := http.ListenAndServe(p.Bind, nil)
 	if err != nil {
 		log.Debugf("Error while listening http connection: %v", err)
 	}

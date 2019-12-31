@@ -2,18 +2,11 @@ package http
 
 import "net/url"
 
-type Proxy struct {
+type HttpProxy struct {
 	Name     string
 	Bind     string
 	Protocol string
 	Rules    []Rule
-	TLS
-}
-
-type TLS struct {
-	CA   string
-	Cert string
-	Key  string
 }
 
 type Rule struct {
