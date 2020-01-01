@@ -38,6 +38,6 @@ tcp:
 api:
   address: ":9000"
 
-# metrics:
-#   prometheus:
-#     address: ":8081"
+metrics:
+  prometheus:
+    address: ":8081"
