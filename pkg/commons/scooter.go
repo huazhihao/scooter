@@ -64,5 +64,10 @@ func (s *Scooter) Run() {
 	apiServer := &s.config.APIServer
 	go apiServer.ListenAndServe()
 
+	prometheus := &s.config.MetricsServer.Prometheus
+	if prometheus.Address != "" {
+		go prometheus.ListenAndServe()
+	}
+
 	<-done
 }

@@ -14,17 +14,7 @@
 
 package metrics
 
-import (
-	"github.com/huazhihao/scooter/pkg/http"
-)
-
 // MetricsServer defines a MetricsServer data structure
 type MetricsServer struct {
-	Prometheus //TODO
-}
-
-// Prometheus defines the Prometheus interface of MetricsServer
-type Prometheus struct {
-	Address string
-	TLS     http.TLS
+	Prometheus
 }
