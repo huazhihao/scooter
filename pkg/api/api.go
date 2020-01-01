@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/huazhihao/scooter/pkg/https"
+	httpproxy "github.com/huazhihao/scooter/pkg/http"
 	"github.com/huazhihao/scooter/pkg/log"
 )
 
 type ApiServer struct {
 	Address string
-	TLS     https.TLS
+	TLS     httpproxy.TLS
 }
 
 func (s *ApiServer) stats(w http.ResponseWriter, r *http.Request) {

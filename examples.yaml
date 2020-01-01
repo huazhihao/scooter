@@ -8,6 +8,7 @@ http:
           value: $local_host
         - key: X-Real-IP
           value: $remote_ip
+
 - name: api-gateway
   address: ":8090"
   rules:
@@ -16,18 +17,17 @@ http:
     - path: /v1/
       url: "http://api-v1/"
 
-# https:
-# - name: load-balancer
-#   address: ":8443"
-#   tls:
-#     cert: ./example-cert.pem
-#     key: ./example-key.pem
-#   rules:
-#     - backends:
-#         - url: "http://server:8001/"
-#           weight: 1
-#         - url: "http://server:8002/"
-#           weight: 10
+https:
+- name: load-balancer
+  address: ":8443"
+  tls:
+    cert: ./test.pem
+    key: ./test-key.pem
+  rules:
+    - url: "http://127.0.0.1:8001/"
+      weight: 1
+    - url: "http://127.0.0.1:8002/"
+      weight: 10
 
 tcp:
 - name: tcp-relay

@@ -15,9 +15,20 @@ type Rule struct {
 	Headers []Header
 	Urls    []string
 	urls    []*url.URL
+	// weight int // TODO
 }
 
 type Header struct {
 	Key   string
 	Value string
+}
+
+type HttpsProxy struct {
+	HttpProxy `yaml:",inline"`
+	TLS
+}
+
+type TLS struct {
+	Cert string
+	Key  string
 }

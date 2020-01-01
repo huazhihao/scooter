@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/huazhihao/scooter/pkg/http"
-	"github.com/huazhihao/scooter/pkg/https"
 	"github.com/huazhihao/scooter/pkg/tcp"
 )
 
@@ -30,7 +29,7 @@ func (s *Scooter) Run() {
 	}
 
 	for _, p := range s.config.HttpsProxies {
-		proxy, err := https.NewHttpsProxy(p)
+		proxy, err := http.NewHttpsProxy(p)
 		if err != nil {
 			log.Fatalf("Unable to create https proxy: %v", err)
 		}

@@ -1,2 +1,5 @@
 scooter
 bin/
+*.pem
+*.key
+*.csr

@@ -1,12 +1,12 @@
 package metrics
 
 import (
-	"github.com/huazhihao/scooter/pkg/https"
+	"github.com/huazhihao/scooter/pkg/http"
 )
 
 type Prometheus struct {
 	Address string
-	TLS     https.TLS
+	TLS     http.TLS
 }
 
 type MetricsServer struct {
