@@ -29,7 +29,7 @@ type Rule struct {
 	URL     string
 	url     *url.URL
 	Headers []Header
-	// weight int // TODO
+	Weight  int
 }
 
 // Header defines a HTTPProxy custom Header data structure

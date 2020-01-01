@@ -15,10 +15,13 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"strings"
+
+	"math/rand"
 
 	"github.com/huazhihao/scooter/pkg/log"
 )
@@ -44,13 +47,24 @@ func joinURLPath(a, b string) string {
 	return a + b
 }
 
+func weightedCompare(a, b int) bool {
+	if a == 0 {
+		a = 1
+	}
+	if b == 0 {
+		b = 1
+	}
+	return rand.Intn(a) > rand.Intn(b)
+}
+
 func (p *HTTPProxy) getLongestMatchingRule(path string) int {
 	maxlen := -1
 	idx := -1
 	for i, r := range p.Rules {
 		if strings.HasPrefix(path, r.Path) {
 			l := len(r.Path)
-			if l > maxlen {
+			if l > maxlen ||
+				(l == maxlen && weightedCompare(p.Rules[idx].Weight, p.Rules[i].Weight)) {
 				maxlen = l
 				idx = i
 			}
@@ -69,6 +83,13 @@ func (p *HTTPProxy) reload() error {
 			}
 			log.Debugf("set rule mapping %s=>%s", r.Path, url)
 			p.Rules[i].url = url
+
+			// Weight cannot be less than 1
+			if r.Weight == 0 {
+				p.Rules[i].Weight = 1
+			} else if r.Weight < 0 {
+				return fmt.Errorf("Weight cannot be less than 1")
+			}
 		}
 	}
 	return nil
