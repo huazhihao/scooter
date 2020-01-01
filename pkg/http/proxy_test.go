@@ -1,3 +1,17 @@
+// Copyright © 2019 Hua Zhihao <ihuazhihao@gmail.com>
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package http
 
 import (
@@ -8,17 +22,17 @@ import (
 	"testing"
 )
 
-func TestHttpProxyPath(t *testing.T) {
+func TestHTTPProxyPath(t *testing.T) {
 	backend := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// dummy rely with the url path
 		fmt.Fprint(w, r.URL.Path)
 	}))
-	p := &HttpProxy{}
+	p := &HTTPProxy{}
 	frontend := httptest.NewServer(p)
 	t.Logf("backend: %s", backend.URL)
 	t.Logf("scooter: %s", frontend.URL)
 	p.Rules = []Rule{
-		Rule{Url: backend.URL},
+		Rule{URL: backend.URL},
 	}
 	p.reload()
 
@@ -47,21 +61,21 @@ func TestHttpProxyPath(t *testing.T) {
 	}
 }
 
-func TestHttpProxyRules(t *testing.T) {
+func TestHTTPProxyRules(t *testing.T) {
 	backend1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "1")
 	}))
 	backend2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "2")
 	}))
-	p := &HttpProxy{}
+	p := &HTTPProxy{}
 	frontend := httptest.NewServer(p)
 	t.Logf("backend1: %s", backend1.URL)
 	t.Logf("backend2: %s", backend2.URL)
 	t.Logf("scooter: %s", frontend.URL)
 	p.Rules = []Rule{
-		Rule{Path: "/", Url: backend1.URL},
-		Rule{Path: "/v2", Url: backend2.URL},
+		Rule{Path: "/", URL: backend1.URL},
+		Rule{Path: "/v2", URL: backend2.URL},
 	}
 	p.reload()
 

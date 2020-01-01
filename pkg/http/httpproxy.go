@@ -1,3 +1,17 @@
+// Copyright © 2019 Hua Zhihao <ihuazhihao@gmail.com>
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package http
 
 import (
@@ -9,8 +23,8 @@ import (
 	"github.com/huazhihao/scooter/pkg/log"
 )
 
-// NewProxy creates a new tcp proxy
-func NewHttpProxy(p HttpProxy) (*HttpProxy, error) {
+// NewHTTPProxy creates a new tcp proxy
+func NewHTTPProxy(p HTTPProxy) (*HTTPProxy, error) {
 	err := p.reload()
 	if err != nil {
 		return nil, err
@@ -30,7 +44,7 @@ func joinURLPath(a, b string) string {
 	return a + b
 }
 
-func (p *HttpProxy) getLongestMatchingRule(path string) int {
+func (p *HTTPProxy) getLongestMatchingRule(path string) int {
 	maxlen := -1
 	idx := -1
 	for i, r := range p.Rules {
@@ -46,29 +60,21 @@ func (p *HttpProxy) getLongestMatchingRule(path string) int {
 }
 
 // reload reloads settings during runtime
-func (p *HttpProxy) reload() error {
+func (p *HTTPProxy) reload() error {
 	for i, r := range p.Rules {
 		{
-			url, err := url.Parse(r.Url)
+			url, err := url.Parse(r.URL)
 			if err != nil {
 				return err
 			}
 			log.Debugf("set rule mapping %s=>%s", r.Path, url)
 			p.Rules[i].url = url
 		}
-		p.Rules[i].urls = []*url.URL{}
-		for _, u := range r.Urls {
-			url, err := url.Parse(u)
-			if err != nil {
-				return err
-			}
-			p.Rules[i].urls = append(p.Rules[i].urls, url)
-		}
 	}
 	return nil
 }
 
-func (p *HttpProxy) delegateDirector(req *http.Request) {
+func (p *HTTPProxy) delegateDirector(req *http.Request) {
 	i := p.getLongestMatchingRule(req.URL.Path)
 
 	if i >= 0 {
@@ -93,7 +99,7 @@ func (p *HttpProxy) delegateDirector(req *http.Request) {
 }
 
 // ServeHTTP receives and handles a single http request
-func (p *HttpProxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (p *HTTPProxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Debugf("receiving %s request from %s/%s", req.Method, req.Host, req.URL.Path)
 
 	r := &httputil.ReverseProxy{
@@ -105,7 +111,7 @@ func (p *HttpProxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 // ListenAndServe listens on proxy.Address and then calls Serve to handle
 // requests on incoming connections.
-func (p *HttpProxy) ListenAndServe() {
+func (p *HTTPProxy) ListenAndServe() {
 	server := http.NewServeMux()
 	server.HandleFunc("/", p.ServeHTTP)
 	log.Debugf("Handling http connection on %s", p.Address)

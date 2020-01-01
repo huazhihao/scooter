@@ -3,6 +3,8 @@ go:
 - 1.x
 script:
 - make test
+- make vet
+- make lint
 before_deploy: make release
 deploy:
   provider: releases

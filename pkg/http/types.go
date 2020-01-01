@@ -1,33 +1,50 @@
+// Copyright © 2019 Hua Zhihao <ihuazhihao@gmail.com>
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package http
 
 import "net/url"
 
-type HttpProxy struct {
+// HTTPProxy defines a HTTPProxy data structure
+type HTTPProxy struct {
 	Name    string
 	Address string
 	Rules   []Rule
 }
 
+// Rule defines a HTTPProxy Rule data structure
 type Rule struct {
 	Path    string
-	Url     string
+	URL     string
 	url     *url.URL
-	Headers []Header
-	Urls    []string
-	urls    []*url.URL
+	Headers []Header // TODO
 	// weight int // TODO
 }
 
+// Header defines a HTTPProxy custom Header data structure
 type Header struct {
 	Key   string
 	Value string
 }
 
-type HttpsProxy struct {
-	HttpProxy `yaml:",inline"`
+// HTTPSProxy defines a HTTPSProxy data structure
+type HTTPSProxy struct {
+	HTTPProxy `yaml:",inline"`
 	TLS
 }
 
+// TLS defines a HTTPSProxy TLS data structure
 type TLS struct {
 	Cert string
 	Key  string

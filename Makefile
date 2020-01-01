@@ -1,4 +1,4 @@
-.PHONY: build, test
+.PHONY: build, test, vet, lint, release
 
 Version=`git describe --abbrev=0 --tags`
 GitSHA=`git rev-parse --short HEAD`
@@ -11,6 +11,12 @@ build:
 test:
 	@echo "Running tests..."
 	@go test -v ./...
+vet:
+	@echo "Running go vet..."
+	@go vet -v ./...
+lint:
+	@echo "Running golint..."
+	@golint ./...
 
 release:
 	@for platform in darwin linux windows; do \

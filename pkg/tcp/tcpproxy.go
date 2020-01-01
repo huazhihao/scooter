@@ -1,3 +1,17 @@
+// Copyright © 2019 Hua Zhihao <ihuazhihao@gmail.com>
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package tcp
 
 import (
@@ -8,8 +22,8 @@ import (
 	"github.com/huazhihao/scooter/pkg/log"
 )
 
-// NewTcpProxy creates a new tcp proxy
-func NewTcpProxy(p TcpProxy) (*TcpProxy, error) {
+// NewTCPProxy creates a new tcp proxy
+func NewTCPProxy(p TCPProxy) (*TCPProxy, error) {
 	remote, err := net.ResolveTCPAddr("tcp", p.Remote)
 	if err != nil {
 		return nil, err
@@ -19,7 +33,7 @@ func NewTcpProxy(p TcpProxy) (*TcpProxy, error) {
 }
 
 // ServeTCP forwards the connection to a backend
-func (p *TcpProxy) ServeTCP(conn net.Conn) {
+func (p *TCPProxy) ServeTCP(conn net.Conn) {
 	log.Debugf("Handling tcp connection from %s", conn.RemoteAddr())
 
 	defer conn.Close()
@@ -43,7 +57,7 @@ func (p *TcpProxy) ServeTCP(conn net.Conn) {
 	<-errChan
 }
 
-func (p TcpProxy) connCopy(dst, src net.Conn, errCh chan error) {
+func (p TCPProxy) connCopy(dst, src net.Conn, errCh chan error) {
 	_, err := io.Copy(dst, src)
 	errCh <- err
 
@@ -63,7 +77,7 @@ func (p TcpProxy) connCopy(dst, src net.Conn, errCh chan error) {
 
 // ListenAndServe listens on proxy.Address and then calls Serve to handle
 // requests on incoming connections.
-func (p *TcpProxy) ListenAndServe() {
+func (p *TCPProxy) ListenAndServe() {
 	log.Debugf("Handling tcp connection on %s", p.Address)
 	ln, err := net.Listen("tcp", p.Address)
 	if err != nil {
