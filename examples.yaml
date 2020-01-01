@@ -35,11 +35,8 @@ tcp:
   address: ":2022"
   remote: "127.0.0.1:22"
 
-# api:
-#   address: ":9443"
-#   tls:
-#     cert: ./example-cert.pem
-#     key: ./example-key.pem
+api:
+  address: ":9000"
 
 # metrics:
 #   prometheus:

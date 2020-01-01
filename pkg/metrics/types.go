@@ -9,6 +9,6 @@ type Prometheus struct {
 	TLS     https.TLS
 }
 
-type Entrypoint struct {
+type MetricsServer struct {
 	Prometheus
 }

@@ -45,5 +45,8 @@ func (s *Scooter) Run() {
 		go proxy.ListenAndServe()
 	}
 
+	apiServer := &s.config.ApiServer
+	go apiServer.ListenAndServe()
+
 	<-done
 }

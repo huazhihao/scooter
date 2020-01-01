@@ -93,14 +93,14 @@ func (p *HttpProxy) delegateDirector(req *http.Request) {
 }
 
 // ServeHTTP receives and handles a single http request
-func (p *HttpProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+func (p *HttpProxy) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Debugf("receiving %s request from %s/%s", req.Method, req.Host, req.URL.Path)
 
 	r := &httputil.ReverseProxy{
 		Director: p.delegateDirector,
 	}
 
-	r.ServeHTTP(rw, req)
+	r.ServeHTTP(w, req)
 }
 
 // ListenAndServe listens on proxy.Address and then calls Serve to handle

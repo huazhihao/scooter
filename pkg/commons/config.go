@@ -12,6 +12,6 @@ type Config struct {
 	HttpProxies   []http.HttpProxy   `yaml:"http"`
 	HttpsProxies  []https.HttpsProxy `yaml:"https"`
 	TcpProxies    []tcp.TcpProxy     `yaml:"tcp"`
-	ApiServer     api.Entrypoint     `yaml:"api"`
-	MetricsServer metrics.Entrypoint `yaml:"metrics"`
+	ApiServer     api.ApiServer     `yaml:"api"`
+	MetricsServer metrics.MetricsServer `yaml:"metrics"`
 }
