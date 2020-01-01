@@ -111,6 +111,6 @@ func (p *HttpProxy) ListenAndServe() {
 	log.Debugf("Handling http connection on %s", p.Address)
 	err := http.ListenAndServe(p.Address, server)
 	if err != nil {
-		log.Fatalf("Error while listening http connection: %v", err)
+		log.Fatalf("Error while listening http connection on %s: %v", p.Address, err)
 	}
 }

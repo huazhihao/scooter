@@ -17,7 +17,7 @@ func NewHttpsProxy(p HttpsProxy) (*HttpsProxy, error) {
 	return &p, nil
 }
 
-// ListenAndServe listens on proxy.bind and then calls Serve to handle
+// ListenAndServe listens on proxy.Address and then calls Serve to handle
 // requests on incoming connections.
 func (p *HttpsProxy) ListenAndServe() {
 	server := http.NewServeMux()
@@ -25,6 +25,6 @@ func (p *HttpsProxy) ListenAndServe() {
 	log.Debugf("Handling https connection on %s", p.Address)
 	err := http.ListenAndServeTLS(p.Address, p.TLS.Cert, p.TLS.Key, server)
 	if err != nil {
-		log.Debugf("Error while listening https connection: %v", err)
+		log.Fatalf("Error while listening https connection on %s: %v", p.Address, err)
 	}
 }

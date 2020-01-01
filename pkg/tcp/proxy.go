@@ -24,16 +24,16 @@ func (p *TcpProxy) ServeTCP(conn net.Conn) {
 
 	defer conn.Close()
 
-	connBackend, err := net.DialTCP("tcp", nil, p.remote)
+	relay, err := net.DialTCP("tcp", nil, p.remote)
 	if err != nil {
 		log.Errorf("Error while connection to backend: %v", err)
 		return
 	}
-	defer connBackend.Close()
+	defer relay.Close()
 
 	errChan := make(chan error)
-	go p.connCopy(conn, connBackend, errChan)
-	go p.connCopy(connBackend, conn, errChan)
+	go p.connCopy(conn, relay, errChan)
+	go p.connCopy(relay, conn, errChan)
 
 	err = <-errChan
 	if err != nil {
@@ -61,18 +61,19 @@ func (p TcpProxy) connCopy(dst, src net.Conn, errCh chan error) {
 	}
 }
 
-// ListenAndServe listens on proxy.bind and then calls Serve to handle
+// ListenAndServe listens on proxy.Address and then calls Serve to handle
 // requests on incoming connections.
 func (p *TcpProxy) ListenAndServe() {
-	ln, err := net.Listen("tcp", "")
+	log.Debugf("Handling tcp connection on %s", p.Address)
+	ln, err := net.Listen("tcp", p.Address)
 	if err != nil {
-		log.Errorf("TODO: %v", err)
+		log.Fatalf("Error while listening tcp connection on %s: %v", p.Address, err)
 		return
 	}
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
-			log.Errorf("TODO: %v", err)
+			log.Errorf("Error while accepting connection from %v: %v", conn.RemoteAddr(), err)
 			return
 		}
 		go p.ServeTCP(conn)
