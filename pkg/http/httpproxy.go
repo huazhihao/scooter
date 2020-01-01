@@ -74,6 +74,23 @@ func (p *HTTPProxy) reload() error {
 	return nil
 }
 
+func (p *HTTPProxy) evalEmbeddedVariable(variable string, req *http.Request) string {
+	if variable[0] == '$' {
+		switch variable {
+		case "$proxy_host":
+			return req.Host
+		case "$proxy_name":
+			return p.Name
+		case "$client_ip":
+			return strings.Split(req.RemoteAddr, ":")[0]
+		// TODO: add more
+		default:
+			return variable
+		}
+	}
+	return variable
+}
+
 func (p *HTTPProxy) delegateDirector(req *http.Request) {
 	i := p.getLongestMatchingRule(req.URL.Path)
 
@@ -88,6 +105,9 @@ func (p *HTTPProxy) delegateDirector(req *http.Request) {
 			req.URL.RawQuery = target.RawQuery + req.URL.RawQuery
 		} else {
 			req.URL.RawQuery = target.RawQuery + "&" + req.URL.RawQuery
+		}
+		for _, h := range rule.Headers {
+			req.Header.Set(h.Key, p.evalEmbeddedVariable(h.Value, req))
 		}
 	} else {
 		// TODO: error handling

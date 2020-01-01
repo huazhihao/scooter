@@ -63,9 +63,9 @@ http:
     - url: "http://localhost:8000"
       headers:
         - key: Host
-          value: $local_host
+          value: $proxy_host
         - key: X-Real-IP
-          value: $remote_ip
+          value: $client_ip
 ```
 
 ### API gateway with version-path mapping

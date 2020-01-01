@@ -28,7 +28,7 @@ type Rule struct {
 	Path    string
 	URL     string
 	url     *url.URL
-	Headers []Header // TODO
+	Headers []Header
 	// weight int // TODO
 }
 
