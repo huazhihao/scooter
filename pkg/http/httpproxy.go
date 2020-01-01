@@ -75,6 +75,9 @@ func (p *HTTPProxy) getLongestMatchingRule(path string) int {
 
 // reload reloads settings during runtime
 func (p *HTTPProxy) reload() error {
+	if p.Address == "" {
+		p.Address = ":80"
+	}
 	for i, r := range p.Rules {
 		{
 			url, err := url.Parse(r.URL)

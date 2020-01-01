@@ -38,18 +38,18 @@ location /some/path/ {
       url: "http://localhost:8000"
       headers:
         - key: Host
-          value: $local_host
+          value: $proxy_host
         - key: X-Real-IP
-          value: $remote_ip
+          value: $client_ip
 ```
 
-## Bind address
+## Bind a custom IP
 
 `nginx.conf`
 
 ```
 location /app1/ {
-    proxy_bind 127.0.0.1;
+    proxy_bind 10.0.0.1;
     proxy_pass http://example.com/app1/;
 }
 ```
@@ -57,9 +57,29 @@ location /app1/ {
 `scooter.yaml`
 
 ```yaml
-- name: api-gateway
-  bind: "127.0.0.1"
+- address: "10.0.0.1"
   rules:
     - path: /
       url: "http://example.com/app1/"
+```
+
+## Weight reverse proxy backends
+
+`nginx.conf`
+
+```
+upstream backend {
+    server backend1.example.com       weight=5;
+    server backend2.example.com:8080;
+}
+```
+
+`scooter.yaml`
+
+```yaml
+- name: backend
+  rules:
+    - url: "http://backend1.example.com"
+      weight: 5
+    - url: "http://backend2.example.com:8080"
 ```

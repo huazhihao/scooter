@@ -19,6 +19,8 @@
     - [TCP proxy as a ssh relay server](#tcp-proxy-as-a-ssh-relay-server)
     - [Scooter API endpoint](#scooter-api-endpoint)
     - [Scooter prometheus endpoint](#scooter-prometheus-endpoint)
+- [Migrate from nginx to scooter](#migrate-from-nginx-to-scooter)
+
 
 ## Installation
 
@@ -121,3 +123,8 @@ metrics:
   prometheus:
     address: ":8081"
 ```
+
+## Migrate from nginx to scooter
+
+Find more examples at [Migrate from nginx to scooter](https://github.com/huazhihao/scooter/blob/master/migrate-from-nginx.md)
+
