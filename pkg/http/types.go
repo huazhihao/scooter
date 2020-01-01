@@ -3,10 +3,9 @@ package http
 import "net/url"
 
 type HttpProxy struct {
-	Name     string
-	Bind     string
-	Protocol string
-	Rules    []Rule
+	Name    string
+	Address string
+	Rules   []Rule
 }
 
 type Rule struct {

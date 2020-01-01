@@ -10,7 +10,6 @@ type HttpsProxy struct {
 }
 
 type TLS struct {
-	CA   string
 	Cert string
 	Key  string
 }

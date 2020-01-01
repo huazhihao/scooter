@@ -20,9 +20,10 @@ func NewHttpsProxy(p HttpsProxy) (*HttpsProxy, error) {
 // ListenAndServe listens on proxy.bind and then calls Serve to handle
 // requests on incoming connections.
 func (p *HttpsProxy) ListenAndServe() {
-	http.HandleFunc("/", p.ServeHTTP)
-	log.Debugf("Handling https connection on %s", p.Bind)
-	err := http.ListenAndServeTLS(p.Bind, p.TLS.Cert, p.TLS.Key, nil)
+	server := http.NewServeMux()
+	server.HandleFunc("/", p.ServeHTTP)
+	log.Debugf("Handling https connection on %s", p.Address)
+	err := http.ListenAndServeTLS(p.Address, p.TLS.Cert, p.TLS.Key, server)
 	if err != nil {
 		log.Debugf("Error while listening https connection: %v", err)
 	}

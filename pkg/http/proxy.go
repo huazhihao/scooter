@@ -53,7 +53,7 @@ func (p *HttpProxy) reload() error {
 			if err != nil {
 				return err
 			}
-			log.Debugf("set rule mapping %s=>%#v", r.Path, url)
+			log.Debugf("set rule mapping %s=>%s", r.Path, url)
 			p.Rules[i].url = url
 		}
 		p.Rules[i].urls = []*url.URL{}
@@ -103,13 +103,14 @@ func (p *HttpProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	r.ServeHTTP(rw, req)
 }
 
-// ListenAndServe listens on proxy.bind and then calls Serve to handle
+// ListenAndServe listens on proxy.Address and then calls Serve to handle
 // requests on incoming connections.
 func (p *HttpProxy) ListenAndServe() {
-	http.HandleFunc("/", p.ServeHTTP)
-	log.Debugf("Handling http connection on %s", p.Bind)
-	err := http.ListenAndServe(p.Bind, nil)
+	server := http.NewServeMux()
+	server.HandleFunc("/", p.ServeHTTP)
+	log.Debugf("Handling http connection on %s", p.Address)
+	err := http.ListenAndServe(p.Address, server)
 	if err != nil {
-		log.Debugf("Error while listening http connection: %v", err)
+		log.Fatalf("Error while listening http connection: %v", err)
 	}
 }

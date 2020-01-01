@@ -1,5 +1,6 @@
+http:
 - name: reverse-proxy
-  bind: ":8000"
+  address: ":8000"
   rules:
     - url: "http://localhost:8000"
       headers:
@@ -7,33 +8,39 @@
           value: $local_host
         - key: X-Real-IP
           value: $remote_ip
-
 - name: api-gateway
-  bind: ":8080"
+  address: ":8090"
   rules:
     - path: /
       url: "http://api-v2/"
     - path: /v1/
       url: "http://api-v1/"
 
-- name: https-proxy
-  bind: ":8443"
-  protocol: https
-  tls:
-    ca: ./example-ca.pem
-    cert: ./example-cert.pem
-    key: ./example-key.pem
-  rules:
-    - url: "http://example.com/"
+# https:
+# - name: load-balancer
+#   address: ":8443"
+#   tls:
+#     cert: ./example-cert.pem
+#     key: ./example-key.pem
+#   rules:
+#     - backends:
+#         - url: "http://server:8001/"
+#           weight: 1
+#         - url: "http://server:8002/"
+#           weight: 10
 
-- name: load-balancer
-  bind: ":8000"
-  rules:
-    - urls:
-        - "http://server:8001/"
-        - "http://server:8002/"
-
+tcp:
 - name: tcp-relay
   protocol: tcp
-  bind: ":22"
-  remote: "192.168.1.100:22"
+  address: ":2022"
+  remote: "127.0.0.1:22"
+
+# api:
+#   address: ":9443"
+#   tls:
+#     cert: ./example-cert.pem
+#     key: ./example-key.pem
+
+# metrics:
+#   prometheus:
+#     address: ":8081"
