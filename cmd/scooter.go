@@ -37,8 +37,8 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "scooter",
-	Short: "A fast and lightweight fully featured reverse proxy",
-	Long: `🛵 Scooter is a fast and lightweight fully featured reverse proxy.
+	Short: "A fast and fully featured reverse proxy",
+	Long: `🛵 Scooter is a lightweight L4+L7 reverse proxy and load balancer written in Go. It provides nginx-like functionalities with little effort on setup, and better integration with modern monitoring tools..
 
   Find more information at: https://github.com/huazhihao/scooter`,
 
