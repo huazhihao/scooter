@@ -18,7 +18,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/huazhihao/scooter/cmd"
+  "github.com/huazhihao/scooter/cmd"
+  _ "github.com/huazhihao/scooter/pkg/commons"
+	_ "github.com/huazhihao/scooter/pkg/log"
+	_ "github.com/huazhihao/scooter/pkg/api"
+	_ "github.com/huazhihao/scooter/pkg/commons"
+	_ "github.com/huazhihao/scooter/pkg/http"
+	_ "github.com/huazhihao/scooter/pkg/tcp"
 )
 
 var (
