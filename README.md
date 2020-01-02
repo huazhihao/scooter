@@ -49,8 +49,64 @@ $ scooter --config scooter.yaml --debug
 
 ## Benchmarks
 
+### Hardware
+
+MacBook Pro (early 2015) CPU: i5 2.7GHz Memory: 8GB
+
+### Operating System
+
+MacOS Mojave
+
+### Backend
+
+nginx static
+
+### Setup
+
 ```
-// TODO
+$ cat benchmark.yaml
+```
+
+```yaml
+http:
+- name: reverse-proxy
+  address: ":8000"
+  rules:
+    - url: "http://127.0.0.1:8080"
+```
+
+```
+$ scooter --config ./benchmark.yaml
+```
+### Benchmark result
+
+Directly to the backend:
+
+```
+$ wrk -t10 -c10 -d10s http://127.0.0.1:8080/
+Running 10s test @ http://127.0.0.1:8080/
+  10 threads and 10 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   634.11us  545.77us  16.99ms   98.02%
+    Req/Sec     1.67k   153.74     1.88k    89.20%
+  167192 requests in 10.10s, 135.52MB read
+Requests/sec:  16550.19
+Transfer/sec:     13.42MB
+```
+
+To scooter:
+
+```
+wrk -t10 -c10 -d10s http://127.0.0.1:8000/
+Running 10s test @ http://127.0.0.1:8000/
+  10 threads and 10 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.39ms  726.80us  18.14ms   90.37%
+    Req/Sec   717.34    134.78     0.86k    92.37%
+  56364 requests in 10.04s, 44.40MB read
+  Socket errors: connect 0, read 0, write 0, timeout 10
+Requests/sec:   5611.65
+Transfer/sec:      4.42MB
 ```
 
 ## Configuration examples
